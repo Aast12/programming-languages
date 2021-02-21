@@ -1,0 +1,112 @@
+\documentclass[]{article}
+\usepackage[margin={1in}]{geometry}
+\usepackage[spanish]{babel}
+\usepackage{datetime}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{verbatim}
+\usepackage{fancyhdr}
+\usepackage[obeyspaces]{url}
+\usepackage{graphicx}
+\graphicspath{ {.} }
+\newdateformat{hwdate}{\THEDAY~de \monthname[\THEMONTH], \THEYEAR}
+\newcommand{\class}{TC2006. Programming languages}
+\newcommand{\hwname}{Homework 02}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\class \\ \hwname}
+\rhead{Andrés Alam Sánchez Torres (A00824854) \\ \hwdate\today}
+\lstset{breaklines=true,
+        language=haskell,
+        showstringspaces=false} 
+
+\begin{document}
+    \setlength{\headheight}{23.10004pt}
+    \addtolength{\topmargin}{-11.10004pt}    
+
+    \section{Classifying programming languages}
+    
+    \noindent
+    Please select three programming languages from any source you prefer. For each of these programming languages, 
+    provide the following information:
+
+    \begin{itemize}
+    
+        \item A web page where the program is described (this can be the vendor’s web page).
+        \item Provide a small example of the code. It can be the “Hello world!” example that is commonly
+        used. There is no need to include functional code, just a piece that allows you to show the
+        properties of the language.
+        \item Classify the language based on how it expresses the solution (declarative or imperative) and briefly
+        justify your answer.
+        \item  Classify the language based on its paradigm (imperative, declarative, structured, object oriented,
+        functional or logic) and briefly justify your answer.
+        
+    \end{itemize}
+
+    \subsection{Haskell}
+
+    \begin{itemize}
+    
+        \item Web page: \url{https://www.haskell.org/}
+        \item Example code:
+        \begin{lstlisting}
+            sayHi name = putStrLn ("hello " ++ name)
+
+            main = sayHi "Alam"
+        \end{lstlisting}
+
+        \item Classify the language based on how it expresses the solution: 
+            Declarative. A program made with haskell is meant to be made out of only evaluation of mathematical functions, and not with a complex execution flow. 
+            Despite it can be used as an imperative language, Haskell was meant to be used as a declarative language, and has a lot of features that forces the programmer 
+            to do so (e. g. immutable variables, no if statements). 
+        \item  Classify the language based on its paradigm:
+            Functional. For the same reason specified above, most haskell programs are structured by only function evaluations.
+        
+    \end{itemize}
+
+    \subsection{Crystal}
+
+    \begin{itemize}
+    
+        \item Web page: \url{https://crystal-lang.org/}
+        \item Example code:
+        \begin{lstlisting}
+            def sayHi(name) 
+                puts "hello #{name}"
+            end
+
+            sayHi("Alam")
+        \end{lstlisting}
+
+        \item Classify the language based on how it expresses the solution: 
+            Imperative. Crystal supports multiple statements that allow the modification of the program's flow, and allows mutation 
+            of variables to create a state. This leads to the definition of programs made out of a set of instructions to be followed. 
+        \item  Classify the language based on its paradigm:
+            Is both structured and object oriented. It supports classes and but it is not tied to the use of them, a program can be made
+            by only using primitive data types.
+        
+    \end{itemize}
+
+    \subsection{Ocaml}
+
+    \begin{itemize}
+    
+        \item Web page: \url{https://ocaml.org/}
+        \item Example code:
+        \begin{lstlisting}
+            let sayHi name = Printf.printf "Hello %s" name;;
+    
+            sayHi "Alam"
+        \end{lstlisting}
+
+        \item Classify the language based on how it expresses the solution: 
+            It's imilar to haskell, so it can be considered declarative as it is meant to be used by using function evaluations. 
+            However, it still has imperative features.
+        \item  Classify the language based on its paradigm:
+            Functional and Object oriented. OCaml is a functional programming language, having no restriction in the use of functions, but it also is complemented
+            by object oriented capabilities.
+        
+        
+    \end{itemize}
+
+\end{document}
