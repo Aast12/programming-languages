@@ -1,0 +1,79 @@
+\documentclass[]{article}
+\usepackage[margin={1in}]{geometry}
+\usepackage[english]{babel}
+\usepackage{datetime}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{verbatim}
+\usepackage{fancyhdr}
+\usepackage[obeyspaces]{url}
+\usepackage{graphicx}
+\usepackage{examplep}
+\graphicspath{ {.} }
+\newdateformat{hwdate}{\THEDAY~de \monthname[\THEMONTH], \THEYEAR}
+\newcommand{\class}{TC2006. Programming Languages}
+\newcommand{\hwname}{Challenge 03}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\class \\ \hwname}
+\rhead{Andrés Alam Sánchez Torres (A00824854) \\ \today}
+\lstset{breaklines=true} 
+
+\begin{document}
+    \setlength{\headheight}{23.10004pt}
+    \addtolength{\topmargin}{-11.10004pt} 
+    
+    \noindent
+    In this challenge, you will design some grammars for recognizing specific structures. This challenge may besolved in teams of at most three members. If you want, you can sumbit this challenge individually.
+
+    \section{Designing grammars}
+ 
+    Design the following grammars.
+
+    \begin{itemize}
+    \item A grammar that produces binary strings that always end with the character 'b'. Please note that theshortest binary strings 
+    allowed are  ``0b `` and  ``1b ``.
+
+    \begin{gather*}
+        S \rightarrow Nb\ |\ Nb \\
+        N \rightarrow B\ |\ BN \\
+        B \rightarrow 0\ |\ 1\\
+    \end{gather*}
+    
+    \item A grammar that produces strings formed with the alphabet{1, 2, 3, ;}, but the characters in the string are sorted from lowest
+    to largest and always end with a semicolon. For example, the strings ``11222223; ``,  ``2; ``, and ``13333; `` can be produced with
+    such a grammar, while the strings  ``132;\ `` and  ``2333332: ``, cannot.
+
+    \begin{gather*}
+        S \rightarrow A;\ |\ B;\ |\ C; \\
+        A \rightarrow 1\ |\ 1A\ |\ B\ |\ C \\
+        B \rightarrow 2\ |\ 2B\ |\ C \\
+        C \rightarrow 3\ |\ 3C\\
+    \end{gather*}
+    
+    \item A grammar that produces the four arithmetic expressions (addition, subtraction, multiplication and division).
+    For example, the expression $(4 * 2) + 8$ can be produced with such a grammar. For simplicity, assume that the terminals \verb\number\
+    and \verb\operator\ define any number and operation valid by your grammar, respectively. Also assume that all the operations 
+    take always two operands.
+    
+    \begin{gather*}
+        S \rightarrow O\ operator\ O\ |\ number \\
+        O \rightarrow number\ |\ (S) \\
+    \end{gather*}
+
+    \item A grammar that produces the four arithmetic expressions (addition, subtraction, multiplication and division) in polish notation
+    (the function appears before the opearands). For example, the expressions \verb\10\, \verb\(MUL 4 2)\, and 
+    \verb\(ADD 5 (SUB 30 (MULT (DIV 4 2) 3)))\ can be produced with such a grammar. For simplicity, assume that the terminals 
+    \verb\number\ and \verb\operator\ define any number and function valid by your grammar, respectively. Also, to avoid problems with 
+    the precedence ofoperators, assume that any expression involving at least one function will be wrapped in parenthesis. Then, with this
+    grammar it is not possible to produce the expression \verb\ADD 5 3\ since it would need to be indicated between parenthesis: 
+    \verb\(ADD 5 3)\.
+
+    \begin{gather*}
+        S \rightarrow (operator\ O\ O)\ |\ number \\
+        O \rightarrow number\ |\ S \\
+    \end{gather*}
+
+ \end{itemize}
+
+\end{document}
