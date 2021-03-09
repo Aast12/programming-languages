@@ -35,7 +35,7 @@ int Analyzer::validateToken(int state, string value) {
         case T_INTEGER:
             return TokenType::INTEGER;
         case T_REGISTER:
-            if (value == "#A" || value == "#B" || value == "#C") return TokenType::INTEGER;
+            if (value == "#A" || value == "#B" || value == "#C") return TokenType::REGISTER;
             std::cerr << "Invalid register " << value << endl;
         case T_RESERVED_WORD:
             if (value == "SUM" || value == "SUB" || value == "MUL" || value == "DIV") return TokenType::OPERATION;

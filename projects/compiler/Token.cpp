@@ -30,6 +30,10 @@ std::string Token::getValue() {
     return value;
 }
 
+bool operator==(const Token& a, const Token& b) {
+    return a.type == b.type && a.value == b.value;
+}
+
 std::ostream&
 operator<<(std::ostream& os, const Token& token) {
     os << "Token <" << toString(token.type) << ", " << token.value << ">";

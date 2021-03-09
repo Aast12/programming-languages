@@ -10,7 +10,7 @@ enum TokenType {
     ERROR
 };
 
-std::string ToString(TokenType);
+std::string toString(TokenType);
 
 class Token {
     TokenType type;
@@ -22,6 +22,8 @@ class Token {
     TokenType getType();
 
     std::string getValue();
+
+    friend bool operator==(const Token&, const Token&);
 
     friend std::ostream& operator<<(std::ostream&, const Token&);
 };
