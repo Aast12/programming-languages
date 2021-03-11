@@ -13,7 +13,12 @@
 ;; === maskedsum ===
 
 (define (maskedSum lst mask)
-  (display "Not yet implemented\n")
+  (apply + (map 
+    (lambda (l m) 
+      (if m l 0)
+    ) 
+    lst mask
+  ))
 )
 
 (display "=== maskedsum ===\n")
@@ -23,8 +28,19 @@
 
 ;; === shift ===
 
+(define (zero-pad n)
+  (if (<= n 0)
+    '()
+    (cons 0 (zero-pad (- n 1)))
+  )
+)
+
+
 (define (shift lst n)
-  (display "Not yet implemented\n")
+  (if (< n 0)
+    (append lst (zero-pad (* n -1)))
+    (append (zero-pad n) lst)
+  )
 )
 
 (display "=== shift ===\n")
@@ -33,8 +49,19 @@
 
 ;; === list2matrix ===
 
+(define (make-matrix lst c) 
+  (if (= c (length lst))
+    (list lst)
+    (cons (take lst c) (make-matrix (drop lst c) c))
+  )
+  
+)
+
 (define (list2matrix lst r c)
-  (display "Not yet implemented\n")
+  (if (= (* r c) (length lst))
+    (make-matrix lst c)
+    lst
+  )
 )
 
 (display "=== list2matrix ===\n")
@@ -45,8 +72,12 @@
 
 ;; === myFilter ===
 
-(define (myFilter f x)
-  (display "Not yet implemented\n")
+(define (myFilter f x) 
+    (cond
+      ((null? x) x)
+      ((f (car x)) (cons (car x) (myFilter f (cdr x))))
+      (else (myFilter f (cdr x)))
+    )
 )
 
 (display "=== myFilter ===\n")
@@ -56,8 +87,24 @@
 
 ;; === swap ===
 
+(define (c-drop lst k)
+  (cond 
+    ((or (= (length lst) 0) (<= (length lst) k)) '())
+    ((= (length lst) 2) (cdr lst))
+    (else (drop lst k))
+  )
+)
+
 (define (swap i j lst)
-  (display "Not yet implemented\n")
+  (let ((li (list-ref lst i)) (lj (list-ref lst j)))
+    (append
+      (take lst i) 
+      (list lj)
+      (take (c-drop lst (+ i 1)) (- (- j i) 1))
+      (list li)
+      (drop lst (+ j 1))
+    )
+  )
 )
 
 (display "=== swap ===\n")
@@ -68,7 +115,10 @@
 ;; === evaluate ===
 
 (define (evaluate coef x)
-  (display "Not yet implemented\n")
+  (apply + (map (lambda (a i) (* a (expt x i))) 
+    coef 
+    (range (- (length coef) 1) -1 -1)
+  ))
 )
 
 (display "=== evaluate ===\n")
@@ -80,7 +130,11 @@
 ;; === ackermann ===
 
 (define (ackermann m n)
-  (display "Not yet implemented\n")
+  (cond
+    ((= m 0) (+ n 1))
+    ((= n 0) (ackermann (- m 1) 1))
+    (else (ackermann (- m 1) (ackermann m (- n 1))))
+  )
 )
 
 (display "=== ackermann ===\n")

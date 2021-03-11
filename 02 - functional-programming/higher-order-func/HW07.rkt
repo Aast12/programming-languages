@@ -68,7 +68,6 @@
 		0
 		(+ (apply + (car m)) (sum (cdr m)))
 	)
-  	
 )
 
 (display "=== sum ===\n")
