@@ -28,8 +28,38 @@
 
 ;; === complete? ===
 
+(define (get-nodes lst)
+	(if (null? lst)
+		lst
+		(cons (caar lst) (get-nodes (cdr lst)))
+	)
+)
+
+(define (has? lst1 lst2)
+	(if (null? lst2)
+		#t
+		(if (findf
+			(lambda (i) (equal? i (car lst2)))
+			lst1
+			)
+			(has? lst1 (cdr lst2))
+			#f
+		)
+	)
+)
+
+(define (complete-aux? graph nodes)
+	
+	(if (null? graph)
+		#t
+		(and (has? (car graph) nodes) (complete-aux? (cdr graph) nodes))
+	)
+)
+
 (define (complete? graph)
-	(display "Not yet implemented\n")
+	(let ((nodes (get-nodes graph)))
+		(complete-aux? graph nodes)
+	)	
 )
 
 (display "=== complete? ===\n")
