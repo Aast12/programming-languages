@@ -153,8 +153,25 @@
   )
 )
 
+(define (get row key)
+  ;;; (display row)
+  ;;; (display "\n")
+  (cond
+    ((null? row) '())
+    ((equal? (caar row) key) (append (cdar row) (get (cdr row) key)))
+    (else (get (cdr row) key))
+  )
+)
+
 (define (select table key)
-  (display "Not yet implemented\n")
+  (apply 
+    append
+    (list key)
+    (map 
+      (lambda (row) (get row key)) 
+      table
+    )
+  )
 )
 
 (display "=== select ===\n")

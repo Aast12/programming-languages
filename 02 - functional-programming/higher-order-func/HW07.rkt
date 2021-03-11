@@ -41,8 +41,18 @@
 
 ;; === unique ===
 
+(define (remove lst item)
+	(filter 
+		(lambda (i) (not (equal? i item)))
+		lst
+	)
+)
+
 (define (unique lst)
-  	(display "Not yet implemented\n")
+  	(if (null? lst)
+		lst
+		(cons (car lst) (unique (remove (cdr lst) (car lst))))
+	)
 )
 
 (display "=== unique ===\n")
