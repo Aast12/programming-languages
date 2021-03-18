@@ -9,7 +9,7 @@ Parser::Parser() {
 
 void Parser::parse(vector<Token> &tokens) {
     if (tokens.size() == 0) {
-        std::cerr << "No tokens found. Expected EOF." << endl;
+        cerr << "Missing tokens. Expected EOF." << endl;
         exit(0);
     }
     switch (tokens[0].getType()) {
@@ -22,11 +22,13 @@ void Parser::parse(vector<Token> &tokens) {
         case END_OF_FILE:
             match(tokens, END_OF_FILE);
             if (tokens.size() > 0) {
-                std::cerr << "Found more tokens after EOF" << endl;
+                cerr << "!!! Found more tokens after EOF !!!" << endl;
+            } else {
+                cout << "File succesfully parsed" << endl;
             }
             return;
         default:
-            std::cerr << "Invalid file" << endl;
+            cerr << "Invalid file" << endl;
             exit(0);
             break;
     }
@@ -34,16 +36,16 @@ void Parser::parse(vector<Token> &tokens) {
     parse(tokens);
 }
 
-void Parser::parseOperation(std::vector<Token> &tokens) {
+void Parser::parseOperation(vector<Token> &tokens) {
     match(tokens, OPERATION);
     match(tokens, REGISTER);
     match(tokens, REGISTER);
 }
 
-void Parser::parseAssignment(std::vector<Token> &tokens) {
+void Parser::parseAssignment(vector<Token> &tokens) {
     match(tokens, ASSIGNMENT);
     if (tokens.size() == 0) {
-        std::cerr << "Expected a register or integer" << endl;
+        cerr << "Expected a register or integer" << endl;
         exit(0);
     }
     switch (tokens[0].getType()) {
@@ -54,16 +56,16 @@ void Parser::parseAssignment(std::vector<Token> &tokens) {
             match(tokens, INTEGER);
             break;
         default:
-            std::cerr << "Expected a register or integer" << endl;
+            cerr << "Expected a register or integer" << endl;
             exit(0);
             break;
     }
     match(tokens, REGISTER);
 }
 
-void Parser::match(std::vector<Token> &tokens, TokenType type) {
+void Parser::match(vector<Token> &tokens, TokenType type) {
     if (tokens.size() == 0 || tokens[0].getType() != type) {
-        std::cerr << "Expected token of type " << toString(type) << endl;
+        cerr << "ERROR: Expected token of type " << toString(type) << endl;
         exit(0);
     } else {
         cout << "matched " << tokens[0] << endl;
@@ -71,9 +73,9 @@ void Parser::match(std::vector<Token> &tokens, TokenType type) {
     };
 }
 
-void Parser::match(std::vector<Token> &tokens, Token token) {
+void Parser::match(vector<Token> &tokens, Token token) {
     if (tokens.size() == 0 || !(tokens[0] == token)) {
-        std::cerr << "Expected token " << token << endl;
+        cerr << "ERROR: Expected token " << token << endl;
         exit(0);
     } else {
         cout << "matched " << token << endl;

@@ -1,5 +1,6 @@
 #include "Scanner.h"
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -36,11 +37,13 @@ int Analyzer::validateToken(int state, string value) {
             return TokenType::INTEGER;
         case T_REGISTER:
             if (value == "#A" || value == "#B" || value == "#C") return TokenType::REGISTER;
-            std::cerr << "Invalid register " << value << endl;
+            cerr << "Invalid register " << value << endl;
+            return TokenType::ERROR;
         case T_RESERVED_WORD:
             if (value == "SUM" || value == "SUB" || value == "MUL" || value == "DIV") return TokenType::OPERATION;
             if (value == "MOV") return TokenType::ASSIGNMENT;
-            std::cerr << "Invalid reserved word " << value << endl;
+            cerr << "Invalid reserved word " << value << endl;
+            return TokenType::ERROR;
         case T_EOF:
             return TokenType::END_OF_FILE;
         default:
@@ -56,7 +59,7 @@ vector<Token> Analyzer::read(string s) {
     for (int i = 0; i < s.size(); i++) {
         state = transition_matrix[state][filter(s[i])];
 
-        if (state > 0) {
+        if (state > 0 || i == s.size() - 1) {
             if (filter(s[i]) != T_BLANK) last_value.push_back(s[i]);
 
             if (state >= 100) {

@@ -11,15 +11,16 @@ using namespace std;
 int main() {
     Analyzer analyzer;
 
-    string file = "MOV 2354 #A MOV #A 4 SUM #A #B;";
+    string file = "MOV 52 #A MOV #A #BA SUM #A #BA;";
 
     vector<Token> tokens = analyzer.read(file);
-
+    
+    cout << "Tokens found:" << endl;
     for (auto token : tokens) {
         cout << token << endl;
     }
 
-    Parser parser = Parser();
+    Parser parser;
 
     parser.parse(tokens);
 }
