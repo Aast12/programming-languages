@@ -6,3 +6,8 @@ __latexindent_temp.tex
 
 a00824854.*
 *.exe
+
+.DS_Store
+*.o
+*.hi
+main
