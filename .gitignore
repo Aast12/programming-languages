@@ -13,5 +13,5 @@ a00824854.*
 main
 
 # erlang
-.beam
-.dump
+*.beam
+*.dump
