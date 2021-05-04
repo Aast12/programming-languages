@@ -11,3 +11,7 @@ a00824854.*
 *.o
 *.hi
 main
+
+# erlang
+.beam
+.dump
