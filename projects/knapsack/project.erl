@@ -24,15 +24,9 @@
 evaluateAux(_, {0, _}, Tpl) -> Tpl;
 evaluateAux([], {_, []}, Tpl) -> Tpl;
 evaluateAux([Hm | Mask], {Capacity, [{Iw, Ip} | Items]}, {W, P}) -> if 
-	Hm and (Capacity - Iw > 0)-> evaluateAux(Mask, {Capacity - Iw, Items}, {W + Iw, P + Ip});
+	Hm and (Capacity - Iw >= 0)-> evaluateAux(Mask, {Capacity - Iw, Items}, {W + Iw, P + Ip});
 	true -> evaluateAux(Mask, {Capacity, Items}, {W, P})
 end.
-
-% evaluateAux([], [], Tpl) -> Tpl;
-% evaluateAux([Hm | Mask], [{Iw, Ip} | Items], {W, P}) -> if 
-% 	Hm -> evaluateAux(Mask,  Items, {W + Iw, P + Ip});
-% 	true -> evaluateAux(Mask, Items, {W, P})
-% end.
 
 evaluate(Mask, {Capacity, Items}) -> evaluateAux(Mask, {Capacity, Items}, {0, 0}).
 
@@ -99,6 +93,11 @@ getInstance(ks10000) -> {1000000, [{120553, 122416}, {179530, 171513}, {76916, 7
 % elements {Solution, Weight, Profit}, where Solution contains the actual solution found and
 % Weight and Profit indicate the total weight and profit packed within the knapsack, respectively.
 % ============================================
+solve({Capacity, Items}, N) -> 
+	Solution = rndSolution(length(Items)),
+	{EvalW, EvalP} = evaluate(Solution, {Capacity, Items}),
+	solveAux({Capacity, Items}, {Solution, EvalW, EvalP}, N).
+
 solveAux(_, Best, 0) -> Best;
 solveAux({Capacity, Items}, {BestS, BestW, BestP}, N) -> 
 	Candidate = mutate(BestS, rand:uniform()),
@@ -107,11 +106,6 @@ solveAux({Capacity, Items}, {BestS, BestW, BestP}, N) ->
 		(EvalP > BestP) and (EvalW =< Capacity) -> solveAux({Capacity, Items}, {Candidate, EvalW, EvalP}, N - 1);
 		true -> solveAux({Capacity, Items}, {BestS, BestW, BestP}, N - 1)
 	end.
-
-solve({Capacity, Items}, N) -> 
-	Solution = rndSolution(length(Items)),
-	{EvalW, EvalP} = evaluate(Solution, {Capacity, Items}),
-	solveAux({Capacity, Items}, {Solution, EvalW, EvalP}, N).
 
 % Concurrent solver 
 %
@@ -124,6 +118,16 @@ solve({Capacity, Items}, N) ->
 % where Solution contains the actual solution found and Weight and Profit indicate the total
 % weight and profit packed within the knapsack, respectively.
 % ============================================
+solveConcurrent(_, -1, -1) -> % special case to wait for processes solutions
+	receive
+		{done, Solution} -> Solution
+	end;
+solveConcurrent(Instance, N, M) -> % inits prcocesses
+	PId = spawn(project, solveConcurrentAux, [Instance, M, {[], 0, 0}, self()]), % Creates process to receive solutions
+	createWorkers(Instance, M, N div M, PId), % Creates workers that will send solutions to PId
+	solveConcurrent(Instance, -1, -1). % Inits process to wait until all the workers are done
+
+% Performs concurrent solution with different defult arguments
 solveConcurrentAux(_, 0, Solution, PId) -> PId ! {done, Solution};
 solveConcurrentAux({Capacity, Items}, K, {BestS, BestW, BestP}, PId) -> 
 	receive
@@ -133,21 +137,16 @@ solveConcurrentAux({Capacity, Items}, K, {BestS, BestW, BestP}, PId) ->
 			end
 	end.
 
+% worker/3 Solves an instance instance with N solutions and sends it to a process
 worker(Instance, N, PId) -> 
 	Solution = solve(Instance, N),
 	PId ! {solution, Solution}.
 
+% createWorkers/4 Creates N workers to solve each an instance with K solutions. The solutions will be sent to the process
+% with PId
 createWorkers(_, 0, _, _) -> ok;
 createWorkers(Instance, N, K, PId) -> spawn(project, worker, [Instance, K, PId]), createWorkers(Instance, N - 1, K, PId).
 
-solveConcurrent(_, -1, -1) -> 
-	receive
-		{done, Solution} -> Solution
-	end;
-solveConcurrent(Instance, N, M) -> 
-	PId = spawn(project, solveConcurrentAux, [Instance, M, {[], 0, 0}, self()]),
-	createWorkers(Instance, M, N div M, PId),
-	solveConcurrent(Instance, -1, -1).
 
 % === Test cases (internal use) ===
 % Use this code to test if your codes are working as expected. 
